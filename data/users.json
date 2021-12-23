@@ -1,1 +1,17 @@
-[{"id":"aaaa00","name":"Jhon Smith","password":"unsecuredpassword1234","lists":["\"{songs:[{artist:\\\"Metallica,title:\\\"Master of puppets\\\"}]}\""]},{"id":"aaaa01","name":"Laurel Fitz","password":"abcdef1234"},{"id":"aaaa02","name":"Daniel Schmitz","password":"qwertyqwerty"}]
+[
+  {
+    "id": "aaaa00",
+    "name": "Jhon Smith",
+    "password": "unsecuredpassword1234",
+    "lists": [
+      {
+        "songs": [
+          { "artist": "Metallica", "title": "Master of puppets" }
+        ],
+        "listId": "fc121d50-0e67-4d49-9ae1-a9ce9fbfc034"
+      }
+    ]
+  },
+  { "id": "aaaa01", "name": "Laurel Fitz", "password": "abcdef1234" },
+  { "id": "aaaa02", "name": "Daniel Schmitz", "password": "qwertyqwerty" }
+]
