@@ -26,7 +26,7 @@ app.use(express.urlencoded())
 const port = process.env.PORT || 3000
 
 const {addUserList,getUserLists, getUserListById, addSongToList,auth,createUser} = require('./routes/users')
-
+/*
 auth.unless = unless
 app.use(auth.unless({
     path:[
@@ -34,15 +34,16 @@ app.use(auth.unless({
             url:'/users',methods:['POST']
         }
     ]
-}))
+})) */
+//app.use(auth)
 
-app.post('/users/:userid/lists',addUserList)
-app.get('/users/:userid/lists',getUserLists)
-app.get('/users/:userid/lists/:listid',getUserListById)
-app.post('/users/:userid/lists/:listid/songs',addSongToList)
+app.post('/users/:userid/lists',auth,addUserList)
+app.get('/users/:userid/lists',auth,getUserLists)
+app.get('/users/:userid/lists/:listid',auth,getUserListById)
+app.post('/users/:userid/lists/:listid/songs',auth,addSongToList)
 app.post('/users',createUser)
 
-app.listen(port,()=>{
+module.exports  = app.listen(port,()=>{
 console.log("app is listening on port 3000")
 })
 

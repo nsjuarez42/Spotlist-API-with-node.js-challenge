@@ -1,13 +1,15 @@
 const fs =require('fs')
-const PATH = "./../../data/users.json"
+const PATH = "./../data/users.json"
 /*
 functions 
 get users read file return json
 set users write file return boolean for success
 
 */
-function getUsers(){
-  fs.readFile(PATH,(err,jsonString)=>{
+ function getUsers(){
+     var response = fs.readFileSync(PATH)
+     return JSON.parse(response)
+ /* fs.readFileSync(PATH,(err,jsonString)=>{
       if(err){
        console.log(err)
        throw new Error("Error reading file")
@@ -15,7 +17,7 @@ function getUsers(){
       //json parse error not being thrown
       var db = JSON.parse(jsonString)
       return db 
-  })
+  })*/
 }
 
 function setUsers(db){

@@ -6,9 +6,11 @@
     "lists": [
       {
         "songs": [
-          { "artist": "Metallica", "title": "Master of puppets" }
+          { "artist": "Metallica", "title": "Battery" },
+          { "artist": "Polyphia", "title": "G.O.A.T" },
+          { "artist": "Guns n roses", "title": "Sweet child o mine" }
         ],
-        "listId": "fc121d50-0e67-4d49-9ae1-a9ce9fbfc034"
+        "listId": "71472d43-1229-43b1-b29a-bb6068d6bb9b"
       }
     ]
   },

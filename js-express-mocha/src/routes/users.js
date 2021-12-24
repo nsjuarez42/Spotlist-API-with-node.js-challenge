@@ -15,8 +15,6 @@ const bcrypt =require('bcrypt')
 }
 */
 
-
-
 /*
 TODO:
 testing
@@ -28,32 +26,37 @@ interface db with fs file impplementation
 */
 async function auth(req,res,next){
     //take in name and password 
+
     try {
         if(!req.body.name || !req.body.password || req.body.name == "" || !req.params.userid){
             res.status(400).send({message:"Invalid parameters"})
+            throw new Error("Invalid parameters")
          }
+         console.log(req.params)
          const {name,password} = req.body
          const {userid} = req.params
- 
+         //params is undefined
+         console.log(userid)
          var db = getUsers()
+
          var user 
          user= db.find(el=>el.id == userid)
 
          if(!user){
-             res.status(401).send({message:"User not found with this id (or user is not the one authenticated)"})
-     throw new Error("User not found with this id (or user is not the one authenticated)")
+             res.status(401).send({message:"User not found"})
+     throw new Error("User not found")
          }
          //compare passwords
 
          //bcrypt compare
-         if(await bcrypt.compare(password,user.password)){
+         if(user.password == password/*await bcrypt.compare(password,user.password)*/){
              next()
          }else{
              res.status(401).send({message:"User is not authenticated"})
              throw new Error("User not authenticated")
          }
     } catch (error) {
-        console.log(error)
+       // console.log(error)
     }
 
 }
@@ -65,7 +68,7 @@ async function createUser(req,res){
             throw new Error("Invalid parameters")
         }
 
-        const {name,password}
+        const {name,password} = req.body
 
         var db = getUsers();
 
@@ -106,7 +109,7 @@ async function createUser(req,res){
     }
        }
     } catch (error) {
-        console.log(error)
+        //console.log(error)
     }
 }
 
@@ -138,8 +141,8 @@ try {
    })
      // console.log(user)
      if(user == undefined){
-        res.status(401).send({message:"User not found with this id (or user is not the one authenticated)"})
-        throw new Error("User not found with this id (or user is not the one authenticated)")
+        res.status(401).send({message:"User not found (or user is not the one authenticated)"})
+        throw new Error("User not found (or user is not the one authenticated)")
     } 
     //create list id
     list.listId = uuidv4()
@@ -160,7 +163,7 @@ try {
    res.status(200).send(list)
 } 
 catch (error) {
-    console.log(error)
+   // console.log(error)
 }
 
 }
@@ -178,7 +181,7 @@ function getUserLists(req,res){
 
         var user = db.find(element=>element.id == userid)
         if(!user){
-            res.status(401).send({message:"User not found with this id (or user is not the one authenticated)"})
+            res.status(401).send({message:"User not found (or user is not the one authenticated)"})
             throw new Error("User not found")
         }else{
          if(user.lists == undefined)res.status(200).send([])
@@ -186,7 +189,7 @@ function getUserLists(req,res){
          res.status(200).send(user.lists)
         }
     } catch (error) {
-        console.log(error)
+       // console.log(error)
     }
 
 }
@@ -205,7 +208,7 @@ function getUserListById(req,res){
      var user = db.find(element=>element.id == userid)
 
      if(!user){
-         res.status(401).send({message:"User not found with this id (or user is not the one authenticated)"})
+         res.status(401).send({message:"User not found (or user is not the one authenticated)"})
          throw new Error("User not found")
      }else{
        //what to do if user has no lists
@@ -222,7 +225,7 @@ function getUserListById(req,res){
        }
      }
  } catch (error) {
-     console.log(error)
+   //  console.log(error)
  }
 }
 
@@ -237,20 +240,20 @@ function addSongToList(req,res){
  */
 
 try {
-    if(!req.body.name || !req.params.userid|| !req.params.listid){
+    if(!req.body.song || !req.params.userid|| !req.params.listid){
         res.status(400).send({message:"Invalid parameters"})
         throw new Error("Invalid parameters")
     }
     const {userid,listid} = req.params
-    var name= JSON.parse(req.body.name)
-    console.log(name)
+    var song= JSON.parse(req.body.song)
+    console.log(song)
 
         var db = getUsers()
         var user = db.find(element=>element.id == userid)
             
              
             if(!user){
-                res.status(401).send({message:"User not found with this id (or user is not the one authenticated)"})
+                res.status(401).send({message:"User not found (or user is not the one authenticated)"})
                 throw new Error("User not found")
             }
             if(user.lists == undefined){
@@ -265,12 +268,12 @@ try {
                  //replace list in user lists    
                  var list_index = user.lists.indexOf(list)
                  //add song to list
-                 list.songs.push(name)
+                 list.songs.push(song)
                  user.lists.splice(list_index,1,list)
                  db.splice(user_index,1,user)
 
                  setUsers(db)
-                 res.status(200).send(name)
+                 res.status(200).send(song)
 
                 }
             //find list by id and add song to it write file
@@ -278,7 +281,7 @@ try {
            
     }
  catch (error) {
-    console.log(error)
+    //console.log(error)
 }
 }
 
