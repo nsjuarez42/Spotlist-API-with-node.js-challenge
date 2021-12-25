@@ -14,6 +14,24 @@ const userid= "aaaa00"
 const wrong_userid = "sdsdsd"
 const listid = "71472d43-1229-43b1-b29a-bb6068d6bb9b"
 
+//repeated code that checks that error response object contains the correct message for invalid parameters
+function checkInvalidParameters(response){
+    expect(response.status).to.eql(400)
+    expect(response.body).to.be.an("object")
+    expect(response.body).to.have.property("message").that.is.eql('Invalid parameters')
+}
+
+function checkUserNotFound(response){
+    expect(response.status).to.eql(401)
+    expect(response.body).to.be.an("object")
+    expect(response.body).to.have.property("message").that.is.eql("User not found")
+}
+
+function checkUserNotAuthenticated(response){
+    expect(response.status).to.eql(401)
+    expect(response.body).to.be.an("object")
+    expect(response.body).to.have.property("message").that.is.eql("User is not authenticated")
+}
 /*Test suite for endpoint POST /users/:userid/lists*/
 describe("Add list to user test",function(){
 
@@ -50,9 +68,7 @@ describe("Add list to user test",function(){
         chai.request(server)
             .post(url)
             .end((err,response)=>{
-                expect(response.status).to.eql(400)
-                expect(response.body).to.be.an("object")
-                expect(response.body).to.have.property("message").that.is.eql('Invalid parameters')
+                checkInvalidParameters(response)
                 done()
             })
 
@@ -75,9 +91,7 @@ describe("Add list to user test",function(){
            .set('content-type', 'application/x-www-form-urlencoded')
            .send({name:username,password,list})
            .end((err,response)=>{
-               expect(response.status).to.eql(401)
-               expect(response.body).to.be.an("object")
-               expect(response.body).to.have.property("message").that.is.eql("User not found")
+               checkUserNotFound(response)
                done()
            })
            
@@ -101,9 +115,7 @@ describe("Add list to user test",function(){
            .set('content-type', 'application/x-www-form-urlencoded')
            .send({name:username,password:wrong_password,list})
            .end((err,response)=>{
-               expect(response.status).to.eql(401)
-               expect(response.body).to.be.an("object")
-               expect(response.body).to.have.property("message").that.is.eql("User is not authenticated")
+               checkUserNotAuthenticated(response)
                done()
            })
 
@@ -139,16 +151,12 @@ describe("Get a specific list of user test",function(){
         chai.request(server)
              .get(url)
              .end((err,response)=>{
-                 expect(response.status).to.eql(400)
-                 expect(response.body).to.be.an("object")
-                 expect(response.body).to.have.property("message").that.is.eql("Invalid parameters")
+                 checkInvalidParameters(response)
                  done()
              })
     })
 
-/*user not authenticated
-send wrong password with correct name
-*/
+
 it("Should return an error with status code 401 with user not authenticated message",function(done){
     const userid = "aaaa00"
     const listid = "fc121d50-0e67-4d49-9ae1-a9ce9fbfc034"
@@ -161,9 +169,7 @@ it("Should return an error with status code 401 with user not authenticated mess
         .set('content-type', 'application/x-www-form-urlencoded')
         .send({name:username,password:wrong_password})
         .end((err,response)=>{
-            expect(response.status).to.be.eql(401)
-            expect(response.body).to.be.an("object")
-            expect(response.body).to.have.property("message").that.eql("User is not authenticated")
+            checkUserNotAuthenticated(response)
             done()
         })
 })
@@ -180,9 +186,7 @@ it("Should return an error with status code 401 with user not found message",fun
     .set('content-type', 'application/x-www-form-urlencoded')
     .send({name:username,password})
     .end((err,response)=>{
-        expect(response.status).to.eql(401)
-        expect(response.body).to.be.an("object")
-        expect(response.body).to.have.property("message").that.is.eql("User not found")
+        checkUserNotFound(response)
         done()
     })
 
@@ -214,8 +218,7 @@ describe("Get lists of specific user",function(){
       chai.request(server)
          .get(url)
          .end((err,response)=>{
-             expect(response.status).to.eql(400)
-             expect(response.body).to.be.an("object").with.property("message").that.is.eql("Invalid parameters")
+             checkInvalidParameters(response)
              done()
          })
     })
@@ -228,8 +231,7 @@ describe("Get lists of specific user",function(){
             .set('content-type', 'application/x-www-form-urlencoded')
             .send({name:username,password})
             .end((err,response)=>{
-                expect(response.status).to.eql(401)
-                expect(response.body).to.be.an("object").and.have.property("message").that.is.eql("User not found")
+                checkUserNotFound(response)
                 done()
             })
             
@@ -270,8 +272,7 @@ describe("Add a song to a specific list",function(){
         chai.request(server)
             .post(url)
             .end((err,response)=>{
-                expect(response.status).to.eql(400)
-                expect(response.body).to.be.an("object").and.to.have.property("message")
+                checkInvalidParameters(response)
                 done()
             })
             
@@ -285,8 +286,7 @@ describe("Add a song to a specific list",function(){
              .set('content-type', 'application/x-www-form-urlencoded')
              .send({name:username,password,song})
              .end((err,response)=>{
-                 expect(response.status).to.eql(401)
-                 expect(response.body).to.be.an("object").and.to.have.property("message")
+                 checkUserNotFound(response)
                  done()
              })
              
@@ -300,8 +300,7 @@ describe("Add a song to a specific list",function(){
             .set('content-type', 'application/x-www-form-urlencoded')
             .send({name:username,password:wrong_password,song})
             .end((err,response)=>{
-                expect(response.status).to.eql(401)
-                expect(response.body).to.be.an("object").and.to.have.property("message")
+                checkUserNotAuthenticated(response)
                 done()
             })    
     })
