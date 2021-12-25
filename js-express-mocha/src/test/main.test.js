@@ -6,17 +6,7 @@ const server = require('../index')
 const expect =chai.expect
 chai.use(chaiHttp)
 
-/*TODO:
- add a list to a user
-
- get lists of a user
-
- get a specific list of a user
-
- add a song to a list
-
- login and create user
-*/
+/*Global variables to use in all tests*/
 const username = "Jhon Smith"
 const password = "unsecuredpassword1234"
 const wrong_password = "asldk"
@@ -24,6 +14,7 @@ const userid= "aaaa00"
 const wrong_userid = "sdsdsd"
 const listid = "71472d43-1229-43b1-b29a-bb6068d6bb9b"
 
+/*Test suite for endpoint POST /users/:userid/lists*/
 describe("Add list to user test",function(){
 
 
@@ -120,6 +111,7 @@ describe("Add list to user test",function(){
 
 })
 
+/*Test suite for endpoint GET /users/:userid/lists/:listid*/
 describe("Get a specific list of user test",function(){
 //send username and password in body
     it("Should return a list and status code 200",function(done){
@@ -198,6 +190,7 @@ it("Should return an error with status code 401 with user not found message",fun
 
 })
 
+/*Test suite for endpoint GET /users/:userid/lists*/
 describe("Get lists of specific user",function(){
 
     it("Should return an array of lists and status code of 200",function(done){
@@ -247,6 +240,7 @@ describe("Get lists of specific user",function(){
 */
 })
 
+/*Test suite for endpoint POST /users/:userid/lists/:listid/songs */
 describe("Add a song to a specific list",function(){
 
     const song = `{
